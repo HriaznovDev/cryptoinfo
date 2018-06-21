@@ -1,0 +1,24 @@
+.App {
+  text-align: center;
+}
+
+.App-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+  margin-bottom: 50px;
+}
+
+.App-title {
+  font-size: 3.5em;
+  color: #fff;
+  font-weight: 600;
+}
+
+.App-intro {
+  font-size: large;
+}
