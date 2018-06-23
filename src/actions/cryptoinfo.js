@@ -6,7 +6,7 @@ export function getInfo () {
         dispatch(getInfoRequest());
 
         axios.get(`https://min-api.cryptocompare.com/data/all/coinlist`).then(response => {
-            const cryptoData = response;
+            const cryptoData = response.data.Data;
 
             dispatch(getInfoSuccess(cryptoData));
         }).catch((error) => {
@@ -17,13 +17,15 @@ export function getInfo () {
 
 export function getInfoRequest () {
     return {
-        type: types.GET_INFO_REQUEST
+        type: types.GET_INFO_REQUEST,
+        loading: true
     }
 }
 
 export function getInfoSuccess (cryptoData) {
     return {
         type: types.GET_INFO_SUCCESS,
+        loading: false,
         cryptoData
     }
 }

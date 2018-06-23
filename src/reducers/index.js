@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import cryptoinfo from './cryptoinfo';
+import cryptoInfo from './cryptoInfo';
 
 const appReducer = combineReducers({
-    cryptoinfo
+    cryptoInfo
 });
 
 const rootReducer = (state, action) => {

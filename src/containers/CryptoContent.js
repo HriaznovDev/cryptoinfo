@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { Table } from 'antd';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import * as actions from '../actions/cryptoinfo';
+import './CryptoContent.css';
+
+const { Column } = Table;
 
 class CryptoContent extends Component {
     componentWillMount() {
@@ -10,46 +13,67 @@ class CryptoContent extends Component {
     }
 
     render() {
-        const columnsTitles = [{
-            title: 'Name',
-            dataIndex: 'name',
-            key: 'name',
-        }, {
-            title: 'Age',
-            dataIndex: 'age',
-            key: 'age',
-        }, {
-            title: 'Address',
-            dataIndex: 'address',
-            key: 'address',
-        }];
+        let dataSource = [];
+        const cryptoData = this.props.cryptoData ? this.props.cryptoData : {};
+        const cryptoSiteUrl = 'https://www.cryptocompare.com';
+        let counter = 0;
 
-        const dataSource = [{
-            key: '1',
-            name: 'Mike',
-            age: 32,
-            address: '10 Downing Street'
-        }, {
-            key: '2',
-            name: 'John',
-            age: 42,
-            address: '10 Downing Street'
-        }];
+        for (let key in cryptoData) {
+            dataSource = [
+                ...dataSource,
+                {
+                    key: cryptoData[key].Id,
+                    name: cryptoData[key].CoinName,
+                    img: cryptoData[key].ImageUrl,
+                    link: cryptoData[key].Url,
+                    number: ++counter
+                }
+            ];
+        }
 
         return (
-            <Table
-                dataSource={dataSource}
-                columns={columnsTitles}
-                bordered={true}
-            />
+            <div className="container">
+                <Table
+                    dataSource={dataSource}
+                    bordered={true}
+                    loading={this.props.tableLoading}
+                    className="CryptoContent"
+                >
+                    <Column
+                        title="#"
+                        dataIndex="number"
+                        key="number"
+                    />
+                    <Column
+                        title="Logo"
+                        dataIndex="logo"
+                        key="logo"
+                        render={(text, record) => (
+                            <a href={cryptoSiteUrl + record.link}>
+                                <img
+                                    src={cryptoSiteUrl + record.img}
+                                    className="CryptoContent__item-logo"
+                                    alt={record.name}
+                                    title={record.name}
+                                />
+                            </a>
+                        )}
+                    />
+                    <Column
+                        title="Coin Name"
+                        dataIndex="name"
+                        key="name"
+                    />
+                </Table>
+            </div>
         );
     }
 }
 
 function mapStateToProps(state) {
-    console.log(state);
     return {
-        cryptoData: state.news
+        tableLoading: state.cryptoInfo.loading,
+        cryptoData: state.cryptoInfo.data
     };
 }
 
