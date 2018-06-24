@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Table } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as actions from '../actions/cryptoinfo';
+import * as actions from '../../actions/cryptoInfo';
 import './CryptoContent.css';
 
 const { Column } = Table;
@@ -16,19 +16,21 @@ class CryptoContent extends Component {
         let dataSource = [];
         const cryptoData = this.props.cryptoData ? this.props.cryptoData : {};
         const cryptoSiteUrl = 'https://www.cryptocompare.com';
-        let counter = 0;
 
-        for (let key in cryptoData) {
-            dataSource = [
-                ...dataSource,
-                {
-                    key: cryptoData[key].Id,
-                    name: cryptoData[key].CoinName,
-                    img: cryptoData[key].ImageUrl,
-                    link: cryptoData[key].Url,
-                    number: ++counter
-                }
-            ];
+        if (Object.values(cryptoData).length !== 0) {
+            Object.values(cryptoData).forEach((item, i) => {
+                dataSource = [
+                    ...dataSource,
+                    {
+                        key: item.Id,
+                        name: item.CoinName,
+                        img: item.ImageUrl,
+                        link: item.Url,
+                        price: item.Price !== 'Unknown' ? item.Price + '$' : item.Price || 'no data',
+                        number: ++i
+                    }
+                ]; 
+            });
         }
 
         return (
@@ -37,6 +39,7 @@ class CryptoContent extends Component {
                     dataSource={dataSource}
                     bordered={true}
                     loading={this.props.tableLoading}
+                    pagination={{defaultPageSize: 15}}
                     className="CryptoContent"
                 >
                     <Column
@@ -63,6 +66,11 @@ class CryptoContent extends Component {
                         title="Coin Name"
                         dataIndex="name"
                         key="name"
+                    />
+                    <Column
+                        title="Price"
+                        dataIndex="price"
+                        key="price"
                     />
                 </Table>
             </div>

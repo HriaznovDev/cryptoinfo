@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import CryptoContent from '../containers/CryptoContent';
+import CryptoContent from '../../containers/CryptoContent/CryptoContent';
 
 class App extends Component {
   render() {
