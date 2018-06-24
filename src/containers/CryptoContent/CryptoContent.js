@@ -8,12 +8,16 @@ import './CryptoContent.css';
 const { Column } = Table;
 
 class CryptoContent extends Component {
-    componentWillMount() {
-        this.props.actions.getInfo();
+    componentDidMount() {
+        this.props.actions.getInfo(45);
     }
 
     render() {
         let dataSource = [];
+        const paginationSettings = {
+            defaultPageSize: 15, 
+            hideOnSinglePage: true
+        };
         const cryptoData = this.props.cryptoData ? this.props.cryptoData : {};
         const cryptoSiteUrl = 'https://www.cryptocompare.com';
 
@@ -26,7 +30,7 @@ class CryptoContent extends Component {
                         name: item.CoinName,
                         img: item.ImageUrl,
                         link: item.Url,
-                        price: item.Price !== 'Unknown' ? item.Price + '$' : item.Price || 'no data',
+                        price: item.Price !== 'Unknown' ? item.Price + '$' : item.Price || 'No data',
                         number: ++i
                     }
                 ]; 
@@ -39,7 +43,7 @@ class CryptoContent extends Component {
                     dataSource={dataSource}
                     bordered={true}
                     loading={this.props.tableLoading}
-                    pagination={{defaultPageSize: 15}}
+                    pagination={paginationSettings}
                     className="CryptoContent"
                 >
                     <Column
