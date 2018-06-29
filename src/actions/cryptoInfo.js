@@ -10,7 +10,7 @@ export function getInfo (maxCryptoItemsLength) {
             
             Promise.all(
                 Object.keys(cryptoData)
-                .filter((item, i) => i < maxCryptoItemsLength)
+                .slice(0, maxCryptoItemsLength)
                 .map(cryptoItem => axios.get(
                     `https://min-api.cryptocompare.com/data/price`,{
                     params: {
