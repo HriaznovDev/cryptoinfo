@@ -9,7 +9,7 @@ const { Column } = Table;
 
 class CryptoContent extends Component {
     componentDidMount() {
-        this.props.actions.getInfo(45);
+        this.props.actions.getInfo();
     }
 
     render() {
@@ -27,10 +27,11 @@ class CryptoContent extends Component {
                     ...dataSource,
                     {
                         key: item.Id,
+                        dataName: item.Name,
                         name: item.CoinName,
                         img: item.ImageUrl,
                         link: item.Url,
-                        price: item.Price !== 'Unknown' ? item.Price + '$' : item.Price || 'No data',
+                        price: item.Price,
                         number: ++i
                     }
                 ]; 
@@ -75,6 +76,13 @@ class CryptoContent extends Component {
                         title="Price"
                         dataIndex="price"
                         key="price"
+                        render={(text, record) => (
+                            record.price ? (
+                                <span>{record.price + '$'}</span>
+                            ) : (
+                                <a onClick={() => this.props.actions.getPrice(record.dataName)}>Show price</a>
+                            )
+                        )}
                     />
                 </Table>
             </div>

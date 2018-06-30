@@ -10,10 +10,32 @@ const cryptoInfo = (state = {}, action) => {
         case types.GET_INFO_SUCCESS:
             return Object.assign({}, state, {
                 loading: action.loading,
-                data: action.cryptoData
+                data: action.payload
             });
 
         case types.GET_INFO_FAILED:
+            return state;
+
+        case types.GET_PRICE_REQUEST:
+            return Object.assign({}, state, {
+                loading: action.loading
+            });
+
+        case types.GET_PRICE_SUCCESS:
+            const newCryptoData = {
+                [action.payload.name]: Object.assign(
+                    {}, 
+                    state.data[action.payload.name], 
+                    action.payload.price
+                )
+            };
+
+            return Object.assign({}, state, {
+                loading: action.loading,
+                data: Object.assign({}, state.data, newCryptoData)
+            });
+
+        case types.GET_PRICE_FAILED:
             return state;
 
         default:
