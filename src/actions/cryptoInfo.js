@@ -7,6 +7,8 @@ export function getInfo (maxCryptoItemsLength) {
 
         axios.get('https://min-api.cryptocompare.com/data/all/coinlist').then(response => {
             const cryptoData = response.data.Data;
+
+            console.log(cryptoData);
             
             dispatch(getInfoSuccess(cryptoData));
         }).catch((error) => {
@@ -50,7 +52,7 @@ export function getPrice (cryptoItem) {
             }
         }).then(response => {
             const cryptoPrice = {
-                'Price': response.data.USD || 'Unknown'
+                'Price': response.data.USD || 'Unknown price'
             };
 
             dispatch(getPriceSuccess(cryptoItem, cryptoPrice));

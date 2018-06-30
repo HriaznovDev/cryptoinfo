@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from '../../actions/cryptoInfo';
 import './CryptoContent.css';
+import ReactSVG from 'react-svg';
 
 const { Column } = Table;
 
@@ -31,6 +32,7 @@ class CryptoContent extends Component {
                         name: item.CoinName,
                         img: item.ImageUrl,
                         link: item.Url,
+                        isTrading: item.IsTrading,
                         price: item.Price,
                         number: ++i
                     }
@@ -73,14 +75,28 @@ class CryptoContent extends Component {
                         key="name"
                     />
                     <Column
+                        title="Coin Trading"
+                        dataIndex="isTrading"
+                        key="isTrading"
+                        render={(text, record) => (
+                            record.isTrading ? (
+                                <ReactSVG path="/media/true.svg" className="CryptoContent__svg" />
+                            ) : (
+                                <ReactSVG path="/media/false.svg" className="CryptoContent__svg" />
+                            )
+                        )}
+                    />
+                    <Column
                         title="Price"
                         dataIndex="price"
                         key="price"
                         render={(text, record) => (
-                            record.price ? (
-                                <span>{record.price + '$'}</span>
+                            record.isTrading ? (
+                                record.price ? (
+                                    <span>{record.price + '$'}</span>
+                                ) : (<a onClick={() => this.props.actions.getPrice(record.dataName)}>Show price</a>)
                             ) : (
-                                <a onClick={() => this.props.actions.getPrice(record.dataName)}>Show price</a>
+                                <span>Unknown price</span>
                             )
                         )}
                     />

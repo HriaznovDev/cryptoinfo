@@ -2,3 +2,8 @@
     width: 80px;
     height: auto;
 }
+
+.CryptoContent__svg svg {
+    width: 20px;
+    height: auto;
+}
