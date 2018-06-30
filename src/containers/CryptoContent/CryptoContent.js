@@ -20,7 +20,8 @@ class CryptoContent extends Component {
             hideOnSinglePage: true
         };
         const cryptoData = this.props.cryptoData ? this.props.cryptoData : {};
-        const cryptoSiteUrl = 'https://www.cryptocompare.com';
+        const CRYPTO_SITE_URL = 'https://www.cryptocompare.com';
+        const BITCOIN_PRICE = this.props.bitcoinPrice ? this.props.bitcoinPrice : null;
 
         if (Object.values(cryptoData).length !== 0) {
             Object.values(cryptoData).forEach((item, i) => {
@@ -59,9 +60,9 @@ class CryptoContent extends Component {
                         dataIndex="logo"
                         key="logo"
                         render={(text, record) => (
-                            <a href={cryptoSiteUrl + record.link}>
+                            <a href={CRYPTO_SITE_URL + record.link}>
                                 <img
-                                    src={cryptoSiteUrl + record.img}
+                                    src={CRYPTO_SITE_URL + record.img}
                                     className="CryptoContent__item-logo"
                                     alt={record.name}
                                     title={record.name}
@@ -93,10 +94,13 @@ class CryptoContent extends Component {
                         render={(text, record) => (
                             record.isTrading ? (
                                 record.price ? (
-                                    <span>{record.price + '$'}</span>
+                                    <div>
+                                        <div>{record.price} <b>USD</b></div>
+                                        <div>{(record.price / BITCOIN_PRICE).toFixed(9)} <b>BTC</b></div>
+                                    </div>
                                 ) : (<a onClick={() => this.props.actions.getPrice(record.dataName)}>Show price</a>)
                             ) : (
-                                <span>Unknown price</span>
+                                <div>Unknown price</div>
                             )
                         )}
                     />
@@ -109,7 +113,8 @@ class CryptoContent extends Component {
 function mapStateToProps(state) {
     return {
         tableLoading: state.cryptoInfo.loading,
-        cryptoData: state.cryptoInfo.data
+        cryptoData: state.cryptoInfo.data,
+        bitcoinPrice: state.cryptoInfo.bitcoinPrice
     };
 }
 

@@ -7,10 +7,21 @@ export function getInfo (maxCryptoItemsLength) {
 
         axios.get('https://min-api.cryptocompare.com/data/all/coinlist').then(response => {
             const cryptoData = response.data.Data;
+            let bitcoinPrice;
 
-            console.log(cryptoData);
-            
-            dispatch(getInfoSuccess(cryptoData));
+            axios.get(
+                `https://min-api.cryptocompare.com/data/price`,{
+                params: {
+                    fsym: 'BTC',
+                    tsyms: 'USD'
+                }
+            }).then(response => {
+                bitcoinPrice = response.data.USD || null;
+
+                dispatch(getInfoSuccess(cryptoData, bitcoinPrice));
+            }).catch((error) => {
+                console.error(error);
+            });
         }).catch((error) => {
             dispatch(getInfoFailed(error));
         });
@@ -24,11 +35,14 @@ export function getInfoRequest () {
     }
 }
 
-export function getInfoSuccess (cryptoData) {
+export function getInfoSuccess (cryptoData, bitcoinPrice) {
     return {
         type: types.GET_INFO_SUCCESS,
         loading: false,
-        payload: cryptoData
+        payload: {
+            cryptoData,
+            bitcoinPrice
+        }
     }
 }
 
@@ -52,7 +66,7 @@ export function getPrice (cryptoItem) {
             }
         }).then(response => {
             const cryptoPrice = {
-                'Price': response.data.USD || 'Unknown price'
+                'Price': response.data.USD || null
             };
 
             dispatch(getPriceSuccess(cryptoItem, cryptoPrice));
