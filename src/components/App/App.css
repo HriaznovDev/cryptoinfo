@@ -22,3 +22,16 @@
 .App-intro {
   font-size: large;
 }
+
+.search-form {
+  max-width: 400px;
+}
+
+.search-form .ant-btn {
+  display: flex;
+}
+
+.ant-table td,
+.ant-table th { 
+  white-space: nowrap; 
+}
