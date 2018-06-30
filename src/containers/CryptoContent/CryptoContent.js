@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Input } from 'antd';
+import { Table, Input, Popover } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from '../../actions/cryptoInfo';
@@ -27,6 +27,9 @@ class CryptoContent extends Component {
             defaultPageSize: 15, 
             hideOnSinglePage: true
         };
+        const defaultPopoverSettings = {
+            mouseEnterDelay: .5
+        }
         const CRYPTO_SITE_URL = 'https://www.cryptocompare.com';
         const BITCOIN_PRICE = this.props.bitcoinPrice ? this.props.bitcoinPrice : null;
         const SEARCH_VALUE = this.state.searchValue;
@@ -100,14 +103,15 @@ class CryptoContent extends Component {
                         key="logo"
                         width="15%"
                         render={(text, record) => (
-                            <a href={CRYPTO_SITE_URL + record.link}>
-                                <img
-                                    src={CRYPTO_SITE_URL + record.img}
-                                    className="CryptoContent__item-logo"
-                                    alt={record.name}
-                                    title={record.name}
-                                />
-                            </a>
+                            <Popover content={record.dataName} placement="right" {...defaultPopoverSettings}>
+                                <a href={CRYPTO_SITE_URL + record.link}>
+                                    <img
+                                        src={CRYPTO_SITE_URL + record.img}
+                                        className="CryptoContent__item-logo"
+                                        alt={record.name}
+                                    />
+                                </a>
+                            </Popover>
                         )}
                     />
                     <Column
@@ -121,15 +125,14 @@ class CryptoContent extends Component {
                         key="isTrading"
                         width="15%"
                         render={(text, record) => (
-                            record.isTrading ? (
+                            <Popover 
+                                content={record.isTrading ? 'This coin is trading' : 'This coin is not trading'}
+                                {...defaultPopoverSettings}
+                            >
                                 <div style={{textAlign: 'center'}}>
-                                    <ReactSVG path="/media/true.svg" className="CryptoContent__svg" />
+                                    <ReactSVG path={`/media/${record.isTrading ? 'true' : 'false'}.svg`} className="CryptoContent__svg" />
                                 </div>
-                            ) : (
-                                <div style={{textAlign: 'center'}}>
-                                    <ReactSVG path="/media/false.svg" className="CryptoContent__svg" />
-                                </div>
-                            )
+                            </Popover>
                         )}
                     />
                     <Column
@@ -144,7 +147,11 @@ class CryptoContent extends Component {
                                         <div>{record.price} <b>USD</b></div>
                                         <div>{(record.price / BITCOIN_PRICE).toFixed(9)} <b>BTC</b></div>
                                     </div>
-                                ) : (<a onClick={() => this.props.actions.getPrice(record.dataName)}>Show price</a>)
+                                ) : (
+                                    <Popover content="Click to see the price" {...defaultPopoverSettings}>
+                                        <a onClick={() => this.props.actions.getPrice(record.dataName)}>Show price</a>
+                                    </Popover>
+                                )
                             ) : (
                                 <div>Unknown price</div>
                             )

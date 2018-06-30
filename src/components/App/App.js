@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { hot } from 'react-hot-loader'
+import { hot } from 'react-hot-loader';
+import { BackTop } from 'antd';
 import './App.css';
 import CryptoContent from '../../containers/CryptoContent/CryptoContent';
 
@@ -11,6 +12,7 @@ class App extends Component {
           <h1 className="App-title">Crypto Info</h1>
         </header>
         <CryptoContent />
+        <BackTop />
       </div>
     );
   }
