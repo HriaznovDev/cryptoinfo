@@ -6,17 +6,23 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  position: relative;
   background-color: #222;
-  height: 150px;
+  height: 180px;
   padding: 20px;
   color: white;
   margin-bottom: 50px;
 }
 
 .App-title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
   font-size: 3.5em;
   color: #fff;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .App-intro {
