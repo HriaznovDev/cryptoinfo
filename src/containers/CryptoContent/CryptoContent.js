@@ -16,6 +16,16 @@ class CryptoContent extends Component {
         this.state = {
             'searchValue': null
         }
+
+        this.antComponentsSettings = {
+            'paginationSettings': {
+                defaultPageSize: 15, 
+                hideOnSinglePage: true
+            },
+            'defaultPopoverSettings': {
+                mouseEnterDelay: .5
+            }
+        };
     }
 
     componentDidMount() {
@@ -23,17 +33,11 @@ class CryptoContent extends Component {
     }
 
     render() {
-        const paginationSettings = {
-            defaultPageSize: 15, 
-            hideOnSinglePage: true
-        };
-        const defaultPopoverSettings = {
-            mouseEnterDelay: .5
-        }
+        let dataSource = [];
+        const { paginationSettings, defaultPopoverSettings } = this.antComponentsSettings;
         const CRYPTO_SITE_URL = 'https://www.cryptocompare.com';
         const BITCOIN_PRICE = this.props.bitcoinPrice ? this.props.bitcoinPrice : null;
         const SEARCH_VALUE = this.state.searchValue;
-        let dataSource = [];
         const cryptoData = this.props.cryptoData ? this.props.cryptoData : {};
 
         if (Object.values(cryptoData).length !== 0) {
@@ -74,7 +78,6 @@ class CryptoContent extends Component {
 
         return (
             <div className="container">
-
                 <Search
                     placeholder="Search by coin name..."
                     onSearch={value => this.setState({'searchValue': value})}
@@ -88,7 +91,7 @@ class CryptoContent extends Component {
                     bordered={true}
                     loading={this.props.tableLoading}
                     pagination={paginationSettings}
-                    scroll={{x: true}}
+                    scroll={{ x: true }}
                     className="CryptoContent"
                 >
                     <Column
@@ -96,6 +99,7 @@ class CryptoContent extends Component {
                         dataIndex="number"
                         key="number"
                         width="7%"
+                        sorter={(a, b) => a.number - b.number}
                     />
                     <Column
                         title="Logo"
@@ -118,6 +122,7 @@ class CryptoContent extends Component {
                         title="Coin Name"
                         dataIndex="name"
                         key="name"
+                        sorter={(a, b) => a.name < b.name}
                     />
                     <Column
                         title="Coin Trading"
