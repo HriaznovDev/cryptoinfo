@@ -15,6 +15,9 @@ class App extends Component {
         </header>
         <CryptoContent />
         <BackTop />
+        <footer>
+          <a href="mailto:hriaznov.dev@gmail.com">hriaznov.dev@gmail.com</a>
+        </footer>
       </div>
     );
   }
